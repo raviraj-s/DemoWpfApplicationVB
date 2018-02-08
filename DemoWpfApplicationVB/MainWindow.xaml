@@ -3,10 +3,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DemoWpfApplicationVB"
+        xmlns:local="clr-namespace:DemoWpfApplicationVB"        
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+    <Window.Resources>
+        <local:EmployeeViewModel x:Key="empViewObject" TxtFirstName="Raviraj" TxtLastName="Sonetta" SldAge="25" ChkHasFilledMBOs="True" DtDateOfJoining="11/07/2016">
+        </local:EmployeeViewModel>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" x:Name="lblName"  Text="First Name:"  VerticalAlignment="Center"></TextBlock>
+            <TextBox x:Name="TxtFirstName" Height="25" Margin="5" Width="150" Grid.Row="0" Grid.Column="1" Text="{Binding TxtFirstName, Source={StaticResource empViewObject}}"></TextBox>
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" x:Name="lblLastName"  Text="Last Name:"  VerticalAlignment="Center"></TextBlock>
+            <TextBox x:Name="TxtLastName" Height="25" Margin="5" Width="150" Grid.Row="1" Grid.Column="1" Text="{Binding TxtLastName, Source={StaticResource empViewObject}}"></TextBox>
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" x:Name="lblDateOfJoining"  Text="Date Of Joining:"  VerticalAlignment="Center"></TextBlock>
+            <DatePicker Grid.Row="2" Grid.Column="1" Margin="5" x:Name="DtDateOfJoining" SelectedDate="{Binding DtDateOfJoining, Source={StaticResource empViewObject}}" Text="{Binding DtDateOfJoining.Date, Source={StaticResource empViewObject}}"></DatePicker>
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" x:Name="lblAge"  Text="Age:"  VerticalAlignment="Center"></TextBlock>
+            <Slider Grid.Row="3" Grid.Column="1" Margin="5" x:Name="SldAge" Maximum="100" Value="{Binding SldAge, Source={StaticResource empViewObject}}" AutoToolTipPlacement="TopLeft" ToolTip="{Binding SldAge, Source={StaticResource empViewObject}}"></Slider>
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" x:Name="lblMBOs"  Text="Has filled MBOs:"  VerticalAlignment="Center"></TextBlock>
+
+            <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" x:Name="ChkHasFilledMBOs" IsChecked="{Binding ChkHasFilledMBOs, Source={StaticResource empViewObject}}" ></CheckBox>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" x:Name="lblElgibleForInc"  Text="Check Increment Eligibility"  VerticalAlignment="Center"></TextBlock>
+            <StackPanel Grid.Row="5" Grid.Column="1" x:Name="StkFilledMBOs" Background="{Binding StkFilledMBOs, Source={StaticResource empViewObject}}">
+                <TextBlock Grid.Row="5" Grid.Column="1" Margin="5" x:Name="LblElgibleForIncResult"   VerticalAlignment="Center" Text="{Binding LblElgibleForIncResult, Mode=OneWay, Source={StaticResource empViewObject}}"></TextBlock>
+            </StackPanel>
+            <Button x:Name="BtnCheckEligibility" Grid.Row="6" Grid.ColumnSpan="2"  Height="25" Width="100" Content="Check Eligibility" Margin="5 5 5 5" Command="{Binding BtnClick, Source={StaticResource empViewObject}}"></Button>
+        </Grid>
     </Grid>
 </Window>
