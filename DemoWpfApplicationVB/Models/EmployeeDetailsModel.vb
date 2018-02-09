@@ -1,4 +1,7 @@
-﻿Public Class EmployeeDetailsModel
+﻿Imports System.ComponentModel
+
+Public Class EmployeeDetailsModel
+  Implements IDataErrorInfo
 
   Private _EmployeeID As Integer
   Public Property EmployeeID() As Integer
@@ -79,16 +82,62 @@
     'End Set
   End Property
 
+  Default Public ReadOnly Property Item(columnName As String) As String Implements IDataErrorInfo.Item
+    Get
+      Dim ValidationResult As String = Nothing
+      Select Case columnName
+        Case "TxtFirstName"
+          ValidationResult = ValidateName()
+        Case "TxtLastName"
+          ValidationResult = ValidateName()
+        Case "DtDateOfJoining"
+          ValidationResult = ValidateDate()
+        Case Else
+          Throw New ApplicationException("Unknown Property being validated on Product.")
+      End Select
+      Return ValidationResult
+    End Get
+  End Property
+
+  Public ReadOnly Property [Error] As String Implements IDataErrorInfo.Error
+    Get
+      Throw New NotImplementedException()
+    End Get
+  End Property
+
   Public Sub CalculateEligibility()
-    If DateOfJoining > DateTime.Now.AddYears(-1) Then
-      _ElgibleForIncResult = "Not Eligible"
-      _StkFilledMBOs = "Red"
-    Else
+    Dim DtIncDate As DateTime = Convert.ToDateTime("31/08/2017")
+    If DateOfJoining < DtIncDate AndAlso HasFilledMBOs = True Then
       _ElgibleForIncResult = "Eligible"
       _StkFilledMBOs = "Green"
+    Else
+      _ElgibleForIncResult = "Not Eligible"
+      _StkFilledMBOs = "Red"
     End If
   End Sub
 
+  Private Function ValidateName() As String
+    If String.IsNullOrEmpty(Me.FirstName) Then
+      Return "First Name needs to be entered."
+    ElseIf Me.FirstName.Length < 3 Then
+      Return "First Name should have more than 3 letters."
+    ElseIf String.IsNullOrEmpty(Me.LastName) Then
+      Return "Last Name needs to be entered."
+    ElseIf Me.LastName.Length < 3 Then
+      Return "Last Name should have more than 3 letters."
+    Else
+      Return String.Empty
+    End If
+  End Function
 
+  Private Function ValidateDate() As String
+    If String.IsNullOrEmpty(Me.DateOfJoining) Then
+      Return "Date of joining needs to be entered."
+    ElseIf Me.DateOfJoining > DateTime.Now Then
+      Return "Date of joining cannot be a future date."
+    Else
+      Return String.Empty
+    End If
+  End Function
 
 End Class

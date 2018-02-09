@@ -3,15 +3,166 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DemoWpfApplicationVB"        
+        xmlns:local="clr-namespace:DemoWpfApplicationVB"                
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
+    <!--xmlns:sys="clr-namespace:System;assembly=mscorlib"-->
     <Window.Resources>
         <local:EmployeeViewModel x:Key="empViewObject" TxtFirstName="Raviraj" TxtLastName="Sonetta" SldAge="25" ChkHasFilledMBOs="True" DtDateOfJoining="11/07/2016">
         </local:EmployeeViewModel>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyleCheck" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="#FFB66423" BorderThickness="1" SnapsToDevicePixels="true" CornerRadius="5">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFDC5F16" Offset="0"/>
+                                    <GradientStop Color="#FFC3591B" Offset="1"/>
+                                    <GradientStop Color="#FFF1A971" Offset="0.351"/>
+                                    <GradientStop Color="#FFE68F43" Offset="0.64"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[2].(GradientStop.Offset)" Storyboard.TargetName="border">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.126"/>
+                                            </DoubleAnimationUsingKeyFrames>-->
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <!--<Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[3].(GradientStop.Offset)" Storyboard.TargetName="border">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.921"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>-->
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Border BorderBrush="Red" BorderThickness="1">
+                                <AdornedElementPlaceholder Name="controlWithError" />
+                            </Border>
+                            <Polygon Margin="-10 0 0 0" Points="0,0 10,0 0,10 0,0" HorizontalAlignment="Right" Fill="Red" FlowDirection="RightToLeft"></Polygon>
+                            <!--<Grid>
+                                <Rectangle  Height="20" Width="20" Fill="Red" Margin="5 0 0 0" RenderTransformOrigin="0.5,0.5">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform Angle="45"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                                <TextBlock FontWeight="Bold" Foreground="White" Margin="13 5 0 0">!</TextBlock>
+                            </Grid>-->                          
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!--<Style TargetType="{x:Type DatePicker}">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Border BorderBrush="Red" BorderThickness="1">
+                                <AdornedElementPlaceholder Name="controlWithError" />
+                            </Border>
+                            <Polygon Margin="-10 0 0 0" Points="0,0 10,0 0,10 0,0" HorizontalAlignment="Right" Fill="Red" FlowDirection="RightToLeft"></Polygon>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>-->
     </Window.Resources>
     <Grid Margin="5">
         <Grid Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.Resources>
+                <!--<Style TargetType="{x:Type TextBox}">
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="true">
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>-->
+                <Style TargetType="{x:Type DatePicker}">
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="true">
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -24,24 +175,35 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" x:Name="lblName"  Text="First Name:"  VerticalAlignment="Center"></TextBlock>
-            <TextBox x:Name="TxtFirstName" Height="25" Margin="5" Width="150" Grid.Row="0" Grid.Column="1" Text="{Binding TxtFirstName, Source={StaticResource empViewObject}}"></TextBox>
+            <TextBox x:Name="TxtFirstName" Height="25" Margin="5" Width="150" Grid.Row="0" Grid.Column="1" Text="{Binding TxtFirstName, Source={StaticResource empViewObject}, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"></TextBox>
             <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" x:Name="lblLastName"  Text="Last Name:"  VerticalAlignment="Center"></TextBlock>
-            <TextBox x:Name="TxtLastName" Height="25" Margin="5" Width="150" Grid.Row="1" Grid.Column="1" Text="{Binding TxtLastName, Source={StaticResource empViewObject}}"></TextBox>
+            <TextBox x:Name="TxtLastName" Height="25" Margin="5" Width="150" Grid.Row="1" Grid.Column="1" Text="{Binding TxtLastName, Source={StaticResource empViewObject}, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"></TextBox>
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" x:Name="lblDateOfJoining"  Text="Date Of Joining:"  VerticalAlignment="Center"></TextBlock>
-            <DatePicker Grid.Row="2" Grid.Column="1" Margin="5" x:Name="DtDateOfJoining" SelectedDate="{Binding DtDateOfJoining, Source={StaticResource empViewObject}}" Text="{Binding DtDateOfJoining.Date, Source={StaticResource empViewObject}}"></DatePicker>
+            <DatePicker Grid.Row="2" Grid.Column="1" Margin="5" x:Name="DtDateOfJoining" SelectedDate="{Binding DtDateOfJoining, Source={StaticResource empViewObject},ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}" Text="{Binding DtDateOfJoining.Date, Source={StaticResource empViewObject},ValidatesOnDataErrors=True,UpdateSourceTrigger=LostFocus}">
+                <!--<DatePicker.BlackoutDates >
+                    <CalendarDateRange Start="01/01/2001" End="02/08/2018"></CalendarDateRange>
+                </DatePicker.BlackoutDates>-->
+            </DatePicker>
             <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" x:Name="lblAge"  Text="Age:"  VerticalAlignment="Center"></TextBlock>
             <Slider Grid.Row="3" Grid.Column="1" Margin="5" x:Name="SldAge" Maximum="100" Value="{Binding SldAge, Source={StaticResource empViewObject}}" AutoToolTipPlacement="TopLeft" ToolTip="{Binding SldAge, Source={StaticResource empViewObject}}"></Slider>
             <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" x:Name="lblMBOs"  Text="Has filled MBOs:"  VerticalAlignment="Center"></TextBlock>
 
             <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" x:Name="ChkHasFilledMBOs" IsChecked="{Binding ChkHasFilledMBOs, Source={StaticResource empViewObject}}" ></CheckBox>
 
-            <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" x:Name="lblElgibleForInc"  Text="Check Increment Eligibility"  VerticalAlignment="Center"></TextBlock>
-            <StackPanel Grid.Row="5" Grid.Column="1" x:Name="StkFilledMBOs" Background="{Binding StkFilledMBOs, Source={StaticResource empViewObject}}">
-                <TextBlock Grid.Row="5" Grid.Column="1" Margin="5" x:Name="LblElgibleForIncResult"   VerticalAlignment="Center" Text="{Binding LblElgibleForIncResult, Mode=OneWay, Source={StaticResource empViewObject}}"></TextBlock>
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" x:Name="lblElgibleForInc"  Text="Check Increment Eligibility:"  VerticalAlignment="Center"></TextBlock>
+            <StackPanel Grid.Row="5" Grid.Column="1" x:Name="StkFilledMBOs" Background="{Binding StkFilledMBOs, Source={StaticResource empViewObject}}" Margin="5">
+                <TextBlock Grid.Row="5" Grid.Column="1" Foreground="White" Margin="5" x:Name="LblElgibleForIncResult"   VerticalAlignment="Center" Text="{Binding LblElgibleForIncResult, Mode=OneWay, Source={StaticResource empViewObject}}"></TextBlock>
             </StackPanel>
-            <Button x:Name="BtnCheckEligibility" Grid.Row="6" Grid.ColumnSpan="2"  Height="25" Width="100" Content="Check Eligibility" Margin="5 5 5 5" Command="{Binding BtnClick, Source={StaticResource empViewObject}}"></Button>
+            <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" x:Name="lblSelectDept"  Text="Select Department:"  VerticalAlignment="Center"></TextBlock>
+            <ComboBox Grid.Column="1" Grid.Row="6" Height="25" VerticalAlignment="Center" x:Name="cmbDepartment" Margin="5"
+                      ItemsSource="{Binding Departments, Source={StaticResource empViewObject}}"   
+                      SelectedItem="{Binding SelectedDepartment, Source={StaticResource empViewObject}}"  
+                      DisplayMemberPath="DepartmentDesc"  ></ComboBox>
+
+            <Button x:Name="BtnCheckEligibility" Grid.Row="7" Foreground="White" Grid.ColumnSpan="2"  Height="25" Width="100" Content="Check Eligibility" Margin="5 5 5 5" Command="{Binding BtnClick, Source={StaticResource empViewObject}}" Style="{DynamicResource ButtonStyleCheck}"></Button>
         </Grid>
     </Grid>
 </Window>
