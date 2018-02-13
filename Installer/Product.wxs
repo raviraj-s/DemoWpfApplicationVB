@@ -24,7 +24,7 @@
 			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
 			 <Component Id="ProductComponent"> 
 				<!-- TODO: Insert files, registry keys, and other resources here. -->
-         <File Source="$(var.DemoWpfApplicationVB.TargetPath)" />
+         <File Source="C:\Users\raviraj.sonetta\Tracing\Test.txt" />
 			 </Component> 
 		</ComponentGroup>
 	</Fragment>
